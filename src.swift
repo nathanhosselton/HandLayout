@@ -1,25 +1,25 @@
 import UIKit
 
 extension CGRect {
-    init(square length: CGFloat) {
+    public init(square length: CGFloat) {
         self.init(size: CGSize(square: length))
     }
 
-    init(size: CGSize) {
+    public init(size: CGSize) {
         self.init(origin: .zero, size: size)
     }
 
-    init(width: CGFloat, height: CGFloat) {
+    public init(width: CGFloat, height: CGFloat) {
         self.init(x: 0, y: 0, width: width, height: height)
     }
 
-    var center: CGPoint {
+    public var center: CGPoint {
         return CGPoint(x: midX, y: midY)
     }
 }
 
 extension CGSize {
-    init(square length: CGFloat) {
+    public init(square length: CGFloat) {
         self.init(width: length, height: length)
     }
 }
@@ -29,13 +29,13 @@ private var defaultLabelFont: UIFont { return UIFont(size: UIFont.labelFontSize)
 extension UILabel {
     
     /// this variant does not apply Handmade defaults as yet
-    convenience init(text: NSAttributedString) {
+    public convenience init(text: NSAttributedString) {
         self.init(frame: .zero)
         attributedText = text
         sizeToFit()
     }
 
-    convenience init(text string: String, font: FontConvertible = defaultLabelFont, color: UIColor = UIColorTextDefault, kerning: CGFloat? = nil) {
+    public convenience init(text string: String, font: FontConvertible = defaultLabelFont, color: UIColor = UIColorTextDefault, kerning: CGFloat? = nil) {
         if kerning == nil {         // avoid using attributedStrings if possible
             self.init(frame: .zero) // since it is a blackbox of who knows what
             text = string
@@ -51,7 +51,7 @@ extension UILabel {
         }
     }
     
-    convenience init(lines: [String], font: FontConvertible = defaultLabelFont) {
+    public convenience init(lines: [String], font: FontConvertible = defaultLabelFont) {
         self.init(frame: .zero)
         text = lines.joined(separator: "\n")
         self.font = font.font
@@ -63,21 +63,21 @@ extension UILabel {
 
 
 extension UIView {
-    convenience init(color: UIColor) {
+    public convenience init(color: UIColor) {
         self.init(frame: .zero)
         backgroundColor = color
     }
 
-    var width: CGFloat {
+    public var width: CGFloat {
         get { return bounds.width }
         set { bounds.size.width = newValue }
     }
-    var height: CGFloat {
+    public var height: CGFloat {
         get { return bounds.height }
         set { bounds.size.height = newValue }
     }
 
-    var y: CGFloat {
+    public var y: CGFloat {
         get {
             return frame.origin.y
         }
@@ -85,7 +85,7 @@ extension UIView {
             frame.origin.y = newValue
         }
     }
-    var x: CGFloat {
+    public var x: CGFloat {
         get {
             return frame.origin.x
         }
@@ -94,7 +94,7 @@ extension UIView {
         }
     }
     /// *does not* adjust height
-    var maxY: CGFloat {
+    public var maxY: CGFloat {
         get {
             return frame.maxY
         }
@@ -103,7 +103,7 @@ extension UIView {
         }
     }
     /// *does not* adjust width
-    var maxX: CGFloat {
+    public var maxX: CGFloat {
         get {
             return frame.maxX
         }
@@ -111,7 +111,7 @@ extension UIView {
             x = newValue - width
         }
     }
-    var size: CGSize {
+    public var size: CGSize {
         get {
             return bounds.size
         }
@@ -120,12 +120,12 @@ extension UIView {
         }
     }
 
-    var origin: CGPoint {
+    public var origin: CGPoint {
         get { return frame.origin }
         set { frame.origin = newValue }
     }
 
-    var viewController: UIViewController? {
+    public var viewController: UIViewController? {
         var vc: UIResponder! = next
         while vc != nil {
             vc = vc.next
@@ -137,7 +137,7 @@ extension UIView {
     }
 
     /// forces a view to not exceed the limits of another view with an optional margin
-    func clamp(to template: UIView, margin: CGFloat = 0) {
+    public func clamp(to template: UIView, margin: CGFloat = 0) {
         let maxW = template.width - margin * 2
         let maxH = template.height - margin * 2
         if width > maxW { width = maxW }
@@ -146,24 +146,24 @@ extension UIView {
 }
 
 extension Int {
-    var f: CGFloat { return CGFloat(self) }
+    public var f: CGFloat { return CGFloat(self) }
 }
 
 extension UInt32 {
-    var f: CGFloat { return CGFloat(self) }
+    public var f: CGFloat { return CGFloat(self) }
 }
 
-let ⅓ = 1.f / 3.f
-let ⅔ = 2.f / 3.f
+public let ⅓ = 1.f / 3.f
+public let ⅔ = 2.f / 3.f
 
 extension UIImage {
-    func size(forHeight newHeight: CGFloat) -> CGSize {
+    public func size(forHeight newHeight: CGFloat) -> CGSize {
         var sz = size
         sz.width = (newHeight / sz.height) * sz.width
         sz.height = newHeight
         return sz
     }
-    func size(forWidth newWidth: CGFloat) -> CGSize {
+    public func size(forWidth newWidth: CGFloat) -> CGSize {
         var sz = size
         sz.height = (newWidth / sz.width) * sz.height
         sz.width = newWidth
@@ -172,23 +172,23 @@ extension UIImage {
 }
 
 extension UIImageView {
-    func size(forHeight newHeight: CGFloat) -> CGSize {
+    public func size(forHeight newHeight: CGFloat) -> CGSize {
         return image?.size(forHeight: newHeight) ?? .zero
     }
-    func size(forWidth newWidth: CGFloat) -> CGSize {
+    public func size(forWidth newWidth: CGFloat) -> CGSize {
         return image?.size(forWidth: newWidth) ?? .zero
     }
 }
 
 extension UIViewController {
-    var width: CGFloat { return view.width }
-    var height: CGFloat { return view.height }
+    public var width: CGFloat { return view.width }
+    public var height: CGFloat { return view.height }
 
-    var insets: UIEdgeInsets {
+    public var insets: UIEdgeInsets {
         return UIEdgeInsets(top: topLayoutGuide.length, left: 0, bottom: bottomLayoutGuide.length, right: 0)
     }
 
-    var activeViewController: UIViewController {
+    public var activeViewController: UIViewController {
         switch self {
         case let nc as UINavigationController:
             if let vc = nc.visibleViewController {
@@ -211,7 +211,7 @@ extension UIViewController {
         }
     }
 
-    var bounds: CGRect {
+    public var bounds: CGRect {
         return view.bounds
     }
 }
@@ -229,62 +229,62 @@ extension UIEdgeInsets: ExpressibleByFloatLiteral {
 }
 
 extension UIEdgeInsets {
-    init(_ value: CGFloat) {
+    public init(_ value: CGFloat) {
         self.init(top: value, left: value, bottom: value, right: value)
     }
 
-    init(vertical: CGFloat, horizontal: CGFloat) {
+    public init(vertical: CGFloat, horizontal: CGFloat) {
         self.init(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
     }
 
-    init(bottom: CGFloat) {
+    public init(bottom: CGFloat) {
         self.init(top: 0, left: 0, bottom: bottom, right: 0)
     }
 
-    init(dx: CGFloat, dy: CGFloat) {
+    public init(dx: CGFloat, dy: CGFloat) {
         self.init(top: dy, left: dx, bottom: -dy, right: -dx)
     }
 
     
-    init(dy: CGFloat) {
+    public init(dy: CGFloat) {
         self.init(dx: 0, dy: dy)
     }
 
-    init(dx: CGFloat) {
+    public init(dx: CGFloat) {
         self.init(dx: dx, dy: 0)
     }
 }
 
 
 extension CALayer {
-    var x: CGFloat {
+    public var x: CGFloat {
         get { return frame.origin.x }
         set { frame.origin.x = newValue }
     }
-    var y: CGFloat {
+    public var y: CGFloat {
         get { return frame.origin.y }
         set { frame.origin.y = newValue }
     }
 }
 
 
-enum Shape: ExpressibleByIntegerLiteral {
+public enum Shape: ExpressibleByIntegerLiteral {
     case square
     case curved(CornerRadius)
 
-    enum CornerRadius {
+    public enum CornerRadius {
         case auto
         case value(CGFloat)
     }
 
-    init(integerLiteral value: Int) {
+    public init(integerLiteral value: Int) {
         self = .curved(.value(CGFloat(value)))
     }
 }
 
 
 extension UIButton {
-    convenience init(title: String, font: FontConvertible = UIFont(size: UIFont.buttonFontSize), tintColor fg: UIColor? = nil, backgroundColor bg: UIColor, shape: Shape = .curved(.auto)) {
+    public convenience init(title: String, font: FontConvertible = UIFont(size: UIFont.buttonFontSize), tintColor fg: UIColor? = nil, backgroundColor bg: UIColor, shape: Shape = .curved(.auto)) {
         self.init()
         
         setTitle(title, for: .normal)
@@ -310,11 +310,11 @@ extension UIButton {
 
 
 extension UIImage {
-    convenience init(color: UIColor) {
+    public convenience init(color: UIColor) {
         self.init(color: color, size: CGSize(square: 1))
     }
 
-    convenience init(color: UIColor, size: CGSize) {
+    public convenience init(color: UIColor, size: CGSize) {
         UIGraphicsBeginImageContext(size)
         guard let ctx = UIGraphicsGetCurrentContext() else { fatalError() }
         ctx.setFillColor(color.cgColor)
@@ -328,7 +328,7 @@ extension UIImage {
         self.init(cgImage: cgImage)
     }
 
-    static func make(color: UIColor, cornerRadius: CGFloat) -> UIImage {
+    public static func make(color: UIColor, cornerRadius: CGFloat) -> UIImage {
         let minEdgeSize = cornerRadius * 2 + 1
         let rect = CGRect(square: minEdgeSize)
 
@@ -352,24 +352,24 @@ extension UIImage {
 }
 
 
-class UIInsetter: UIView {
-    let insets: UIEdgeInsets
+public class UIInsetter: UIView {
+    private let insets: UIEdgeInsets
 
-    convenience init(wrap gift: UIView, margin: CGFloat) {
+    public convenience init(wrap gift: UIView, margin: CGFloat) {
         self.init(wrap: gift, insets: UIEdgeInsets(margin))
     }
 
-    init(wrap gift: UIView, insets: UIEdgeInsets) {
+    public init(wrap gift: UIView, insets: UIEdgeInsets) {
         self.insets = insets
         super.init(frame: UIEdgeInsetsInsetRect(gift.frame, insets))
         addSubview(gift)
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         for view in subviews {
             view.frame = UIEdgeInsetsInsetRect(bounds, insets)
         }
@@ -379,21 +379,21 @@ class UIInsetter: UIView {
 
 extension CGRect {
     /// because we provide a convertible for UIEdgeInsets you can do eg: `rect.inset(by: 10)`
-    func inset(by insets: UIEdgeInsets) -> CGRect {
+    public func inset(by insets: UIEdgeInsets) -> CGRect {
         return UIEdgeInsetsInsetRect(self, insets)
     }
 }
 
 
 extension CGAffineTransform {
-    init(translation pt: CGPoint) {
+    public init(translation pt: CGPoint) {
         self.init(translationX: pt.x, y: pt.y)
     }
 }
 
 
 extension UIView {
-    func autoCoverSuperView() {
+    public func autoCoverSuperView() {
         guard let superview = self.superview else { return }
 
         // otherwise we will get crashy-conflicts
@@ -407,15 +407,15 @@ extension UIView {
 }
 
 
-func *(size: CGSize, factor: CGFloat) -> CGSize {
+public func *(size: CGSize, factor: CGFloat) -> CGSize {
     return CGSize(width: size.width * factor, height: size.height * factor)
 }
 
-func *=(lhs: inout CGSize, rhs: CGFloat) {
+public func *=(lhs: inout CGSize, rhs: CGFloat) {
     lhs = lhs * rhs
 }
 
-func +(lhs: NSAttributedString, rhs: NSAttributedString) -> NSAttributedString {
+public func +(lhs: NSAttributedString, rhs: NSAttributedString) -> NSAttributedString {
     let rv = NSMutableAttributedString(attributedString: lhs)
     rv.append(rhs)
     return rv
@@ -423,7 +423,7 @@ func +(lhs: NSAttributedString, rhs: NSAttributedString) -> NSAttributedString {
 
 
 extension NSAttributedString {
-    convenience init(string: String, font: FontConvertible = UIFont(), color: UIColor = UIColorTextDefault, kerning: CGFloat? = nil) {
+    public convenience init(string: String, font: FontConvertible = UIFont(), color: UIColor = UIColorTextDefault, kerning: CGFloat? = nil) {
         var attrs: [String: Any] = [
             NSFontAttributeName: font.font,
             NSForegroundColorAttributeName: color
@@ -435,7 +435,7 @@ extension NSAttributedString {
 
 
 extension UIDevice {
-    enum Model {
+    public enum Model {
         case classic  // original iPhone until iPhone 5
         case SE       // iPhone 5
         case normal   // iPhone 6
@@ -443,7 +443,7 @@ extension UIDevice {
         case unknown  // TEH FUTURE
     }
 
-    class var model: Model {
+    public class var model: Model {
         let sz = UIScreen.main.bounds.size
         switch (sz.width, sz.height) {
         case (320, 480): return .classic
@@ -458,11 +458,11 @@ extension UIDevice {
 
 
 extension UILabel {
-    func size(forHeight newHeight: CGFloat) -> CGSize {
+    public func size(forHeight newHeight: CGFloat) -> CGSize {
         fatalError()
     }
 
-    func size(forWidth newWidth: CGFloat) -> CGSize {
+    public func size(forWidth newWidth: CGFloat) -> CGSize {
         guard let str = attributedText else { fatalError("Unsupported code path, please fork and implement") }
         let size = CGSize(width: newWidth, height: 10_000)
         let opts: NSStringDrawingOptions = [.usesLineFragmentOrigin, .usesFontLeading]
@@ -473,7 +473,7 @@ extension UILabel {
 
 
 extension UIFont {
-    func size(forWidth width: CGFloat, text: String) -> CGSize {
+    public func size(forWidth width: CGFloat, text: String) -> CGSize {
         let bounds = CGSize(width: width, height: 100_000)
         return text.boundingRect(with: bounds, options: .usesLineFragmentOrigin, attributes: [
             NSFontAttributeName: self
@@ -484,46 +484,46 @@ extension UIFont {
 
 //MARK: Defaults
 
-var UIColorTextDefault: UIColor!
-var UIFontWeightDefault: UIFont.Weight = .medium
-var UIFontNameForWeight: (UIFont.Weight) -> String = { _ in UIFont.systemFont(ofSize: 13).fontName }
+public var UIColorTextDefault: UIColor!
+public var UIFontWeightDefault: UIFont.Weight = .medium
+public var UIFontNameForWeight: (UIFont.Weight) -> String = { _ in UIFont.systemFont(ofSize: 13).fontName }
 
 extension UIFont {
-    enum Weight {
+    public enum Weight {
         case light, medium, heavy, black
     }
     
-    convenience init(size: CGFloat = UIFont.systemFontSize, weight: Weight = UIFontWeightDefault) {
+    public convenience init(size: CGFloat = UIFont.systemFontSize, weight: Weight = UIFontWeightDefault) {
         self.init(name: UIFontNameForWeight(weight), size: size)!
     }
 }
 
 
 
-protocol FontConvertible {
+public protocol FontConvertible {
     var font: UIFont { get }
 }
 
 extension Double: FontConvertible {
-    var font: UIFont { return UIFont(size: CGFloat(self)) }
+    public var font: UIFont { return UIFont(size: CGFloat(self)) }
 }
 
 extension CGFloat: FontConvertible {
-    var font: UIFont { return UIFont(size: self) }
+    public var font: UIFont { return UIFont(size: self) }
 }
 
 extension UIFont: FontConvertible {
-    var font: UIFont { return self }
+    public var font: UIFont { return self }
 }
 
 extension Int: FontConvertible {
-    var font: UIFont { return UIFont(size: CGFloat(self)) }
+    public var font: UIFont { return UIFont(size: CGFloat(self)) }
 }
 
 
 
 extension UIColor {
-    func adjusted(alpha: CGFloat) -> UIColor {
+    public func adjusted(alpha: CGFloat) -> UIColor {
         var (r, g, b) = (0.f, 0.f, 0.f)
         getRed(&r, green: &g, blue: &b, alpha: nil)
         return UIColor(red: r, green: g, blue: b, alpha: alpha)
