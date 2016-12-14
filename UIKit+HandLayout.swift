@@ -55,11 +55,18 @@ extension UILabel {
         }
     }
     
-    public convenience init(lines: [String], font: FontConvertible = defaultLabelFont) {
+    public convenience init(lines: [String], font: FontConvertible = defaultLabelFont, kerning: CGFloat? = nil) {
+        let string = lines.joined(separator: "\n")
+
         self.init(frame: .zero)
-        text = lines.joined(separator: "\n")
-        self.font = font.font
-        textColor = UIColorTextDefault
+
+        if let kerning = kerning {
+            attributedText = NSAttributedString(string: string, font: font, kerning: kerning)
+        } else {
+            text = string
+            self.font = font.font
+            textColor = UIColorTextDefault
+        }
         numberOfLines = lines.count
         sizeToFit()
     }
@@ -241,7 +248,7 @@ extension UIEdgeInsets {
         self.init(top: value, left: value, bottom: value, right: value)
     }
 
-    public init(vertical: CGFloat, horizontal: CGFloat) {
+    public init(horizontal: CGFloat, vertical: CGFloat) {
         self.init(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
     }
 
@@ -368,16 +375,18 @@ extension UIImage {
 
 
 public class UIInsetter: UIView {
+    private let subview: UIView
     private let insets: UIEdgeInsets
 
     public convenience init(wrap gift: UIView, margin: CGFloat) {
         self.init(wrap: gift, insets: UIEdgeInsets(margin))
     }
 
-    public init(wrap gift: UIView, insets: UIEdgeInsets) {
+    public init(wrap subview: UIView, insets: UIEdgeInsets) {
+        self.subview = subview
         self.insets = insets
-        super.init(frame: UIEdgeInsetsInsetRect(gift.frame, insets))
-        addSubview(gift)
+        super.init(frame: UIEdgeInsetsInsetRect(subview.frame, insets))
+        addSubview(subview)
     }
 
     public required init?(coder: NSCoder) {
@@ -385,9 +394,15 @@ public class UIInsetter: UIView {
     }
 
     public override func layoutSubviews() {
-        for view in subviews {
-            view.frame = UIEdgeInsetsInsetRect(bounds, insets)
-        }
+        subview.frame = UIEdgeInsetsInsetRect(bounds, insets)
+    }
+
+    public override func becomeFirstResponder() -> Bool {
+        return subview.becomeFirstResponder()
+    }
+
+    public override func resignFirstResponder() -> Bool {
+        return subview.resignFirstResponder()
     }
 }
 
@@ -436,6 +451,9 @@ public func +(lhs: NSAttributedString, rhs: NSAttributedString) -> NSAttributedS
     return rv
 }
 
+public func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+    return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
+}
 
 extension NSAttributedString {
     public convenience init(string: String, font: FontConvertible = UIFont(), color: UIColor = UIColorTextDefault, kerning: CGFloat? = nil) {
