@@ -22,6 +22,10 @@ extension CGSize {
     public init(square length: CGFloat) {
         self.init(width: length, height: length)
     }
+
+    public static var max: CGSize {
+        return CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+    }
 }
 
 private var defaultLabelFont: UIFont { return UIFont(size: UIFont.labelFontSize) }
@@ -63,6 +67,10 @@ extension UILabel {
 
 
 extension UIView {
+    public convenience init(width: CGFloat = UIScreen.main.bounds.width, height: CGFloat) {
+        self.init(frame: CGRect(width: width, height: height))
+    }
+
     public convenience init(color: UIColor) {
         self.init(frame: .zero)
         backgroundColor = color
@@ -241,10 +249,13 @@ extension UIEdgeInsets {
         self.init(top: 0, left: 0, bottom: bottom, right: 0)
     }
 
+    public init(top: CGFloat) {
+        self.init(top: top, left: 0, bottom: 0, right: 0)
+    }
+
     public init(dx: CGFloat, dy: CGFloat) {
         self.init(top: dy, left: dx, bottom: -dy, right: -dx)
     }
-
     
     public init(dy: CGFloat) {
         self.init(dx: 0, dy: dy)
@@ -264,6 +275,10 @@ extension CALayer {
     public var y: CGFloat {
         get { return frame.origin.y }
         set { frame.origin.y = newValue }
+    }
+    public var width: CGFloat {
+        get { return bounds.size.width }
+        set { bounds.size.width = newValue }
     }
 }
 
