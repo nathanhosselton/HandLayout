@@ -32,14 +32,14 @@ private var defaultLabelFont: UIFont { return UIFont(size: UIFont.labelFontSize)
 
 extension UILabel {
     
-    /// this variant does not apply Handmade defaults as yet
+    /// this variant does not apply Handmade defaults TODO: FIXME: ANDTHAT
     public convenience init(text: NSAttributedString) {
         self.init(frame: .zero)
         attributedText = text
         sizeToFit()
     }
 
-    public convenience init(text string: String, font: FontConvertible = defaultLabelFont, color: UIColor = UIColorTextDefault, kerning: CGFloat? = nil) {
+    public convenience init(text string: String, font: FontConvertible = defaultLabelFont, color: UIColor = UIColorTextDefault, kerning: CGFloat? = UIKerningDefault) {
         if kerning == nil {         // avoid using attributedStrings if possible
             self.init(frame: .zero) // since it is a blackbox of who knows what
             text = string
@@ -55,7 +55,7 @@ extension UILabel {
         }
     }
     
-    public convenience init(lines: [String], font: FontConvertible = defaultLabelFont, kerning: CGFloat? = nil) {
+    public convenience init(lines: [String], font: FontConvertible = defaultLabelFont, kerning: CGFloat? = UIKerningDefault) {
         let string = lines.joined(separator: "\n")
 
         self.init(frame: .zero)
@@ -306,16 +306,15 @@ public enum Shape: ExpressibleByIntegerLiteral {
 
 
 extension UIButton {
-    public convenience init(title: String, font: FontConvertible = UIFont(size: UIFont.buttonFontSize), tintColor fg: UIColor? = nil, backgroundColor bg: UIColor, shape: Shape = .curved(.auto)) {
+    public convenience init(title: String, font: FontConvertible = UIFont(size: UIFont.buttonFontSize), titleColor fg: UIColor? = nil, backgroundColor bg: UIColor, shape: Shape = .curved(.auto), kerning: CGFloat? = UIKerningDefault)
+    {
         self.init()
-        
-        setTitle(title, for: .normal)
-        tintColor = fg
-        titleLabel?.font = font.font
-        
+
+        setTitleColor(fg, for: .normal)
+        setAttributedTitle(NSAttributedString(string: title, font: font, kerning: kerning), for: .normal)
         sizeToFit()
         
-        bounds.size.width += 20
+        bounds.size.width += 20  //FIXME arbituary
         
         switch shape {
         case .square:
@@ -412,6 +411,15 @@ extension CGRect {
     public func inset(by insets: UIEdgeInsets) -> CGRect {
         return UIEdgeInsetsInsetRect(self, insets)
     }
+
+    public func inset(_ edges: UIRectEdge, by: CGFloat) -> CGRect {
+        var insets = UIEdgeInsets()
+        if edges.contains(.top) { insets.top = by }
+        if edges.contains(.bottom) { insets.bottom = by }
+        if edges.contains(.left) { insets.left = by }
+        if edges.contains(.right) { insets.right = by }
+        return UIEdgeInsetsInsetRect(self, insets)
+    }
 }
 
 
@@ -455,8 +463,18 @@ public func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
     return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
 }
 
+public func -(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+    return CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
+}
+
+public func -=(lhs: inout CGPoint, rhs: CGPoint) {
+    lhs = lhs - rhs
+}
+
+
+
 extension NSAttributedString {
-    public convenience init(string: String, font: FontConvertible = UIFont(), color: UIColor = UIColorTextDefault, kerning: CGFloat? = nil) {
+    public convenience init(string: String, font: FontConvertible = UIFont(), color: UIColor = UIColorTextDefault, kerning: CGFloat? = UIKerningDefault) {
         var attrs: [String: Any] = [
             NSFontAttributeName: font.font,
             NSForegroundColorAttributeName: color
@@ -520,6 +538,7 @@ extension UIFont {
 public var UIColorTextDefault: UIColor!
 public var UIFontWeightDefault: UIFont.Weight = .medium
 public var UIFontNameForWeight: (UIFont.Weight) -> String = { _ in UIFont.systemFont(ofSize: 13).fontName }
+public var UIKerningDefault: CGFloat?
 
 extension UIFont {
     public enum Weight {
@@ -562,3 +581,15 @@ extension UIColor {
         return UIColor(red: r, green: g, blue: b, alpha: alpha)
     }
 }
+
+
+
+extension NSCoder {
+    public static var null: NSCoder {
+        let data = NSMutableData()
+        let archiver = NSKeyedArchiver(forWritingWith: data)
+        archiver.finishEncoding()
+        return NSKeyedUnarchiver(forReadingWith: data as Data)
+    }
+}
+

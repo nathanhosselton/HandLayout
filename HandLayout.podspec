@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.summary       = "Auto Layout? Auto Schmayout."
   s.homepage      = "https://github.com/mxcl/HandLayout"
   s.license       = "Public Domain"
-  s.author             = { "Max Howell" => "mxcl@me.com" }
+  s.author        = { "Max Howell" => "mxcl@me.com" }
   s.platform      = :ios
   s.source        = { :git => "#{s.homepage}", :tag => "#{s.version}" }
   s.source_files  = "*.swift"
