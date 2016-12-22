@@ -310,8 +310,7 @@ extension UIButton {
     {
         self.init()
 
-        setTitleColor(fg, for: .normal)
-        setAttributedTitle(NSAttributedString(string: title, font: font, kerning: kerning), for: .normal)
+        setAttributedTitle(NSAttributedString(string: title, font: font, color: fg ?? UIColorTextDefault, kerning: kerning), for: .normal)
         sizeToFit()
         
         bounds.size.width += 20  //FIXME arbituary
